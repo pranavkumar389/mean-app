@@ -46,13 +46,27 @@ router.post('', multer({storage: storage}).single('image'), (req, res, next) => 
 });
 
 router.get('',(req, res, next) => {
-  Post.find()
+  const pageSize = +req.query.pageSize;
+  const currentPage = +req.query.page;
+  const postQuery = Post.find();
+  let _documents;
+  if (pageSize && currentPage){
+    postQuery
+    .skip(pageSize * (currentPage - 1))
+    .limit(pageSize);
+  }
+  postQuery
     .then(documents => {
+      _documents = documents;
+      return Post.countDocuments();
+    })
+    .then(count => {
       res.status(200).json({
         message: '',
-        posts: documents
+        posts: _documents,
+        count: count
       });
-    });
+    })
 });
 
 router.put('/:id',multer({storage: storage}).single('image'), (req, res, next) => {
@@ -64,7 +78,8 @@ router.put('/:id',multer({storage: storage}).single('image'), (req, res, next) =
   const post = new Post({
     _id: req.params.id,
     title: req.body.title,
-    content: req.body.content
+    content: req.body.content,
+    imagePath: imagePath
   });
   Post.updateOne({_id: req.params.id}, post).then(result => {
     res.status(200).json({
