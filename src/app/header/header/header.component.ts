@@ -1,15 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-header',
-  template: `<mat-toolbar color="primary">My Messages</mat-toolbar>`,
+  template: `
+    <mat-toolbar color="primary">
+      <span><a routerLink='/'>My Messages</a></span>
+      <span class="spacer"></span>
+      <ul>
+        <li>
+          <a mat-button routerLink='/create' routerLinkActive='mat-accent'>New Post</a>
+        </li>
+      </ul>
+    </mat-toolbar>
+  `,
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit() {
-  }
+export class HeaderComponent {
 
 }

@@ -1,12 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-
-const Post = require('./models/post');
+const path = require('path');
 const mongoose = require('mongoose');
 
+const postsRoutes = require('./routers/post')
 const app = express();
 
-mongoose.connect('mongodb+srv://<userid>:<password>@cluster0-rbewm.mongodb.net/test?retryWrites=true&w=majority', { useNewUrlParser: true })
+mongoose.connect('mongodb+srv://coco99:RsNCTFSb96w9ZECv@cluster0-rbewm.mongodb.net/test?retryWrites=true&w=majority', { useNewUrlParser: true })
   .then(() => {
     console.log('Connected to database!');
   })
@@ -17,6 +17,7 @@ mongoose.connect('mongodb+srv://<userid>:<password>@cluster0-rbewm.mongodb.net/t
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
+app.use('/images', express.static(path.join('backend/images')));
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -25,33 +26,6 @@ app.use((req, res, next) => {
   next();
 });
 
-app.post('/api/posts',(req, res, next) => {
-  const post = new Post({
-    title: req.body.title,
-    content: req.body.content
-  });
-  post.save().then((createdPost) => {
-    res.status(201).json({
-      message: 'Post added successfully',
-      newPostId: createdPost._id
-    });
-  });
-});
-
-app.get('/api/posts',(req, res, next) => {
-  Post.find()
-    .then(documents => {
-      res.status(200).json({
-        message: 'Hi client, I am server!',
-        posts: documents
-      });
-    });
-});
-
-app.delete('/api/posts/:id', (req, res, next) => {
-  Post.deleteOne({_id: req.params.id}).then(result => {
-    res.status(200).json({message: 'Post deleted!'});
-  })
-});
+app.use('/api/posts', postsRoutes);
 
 module.exports = app;
