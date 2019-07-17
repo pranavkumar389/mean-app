@@ -10,6 +10,12 @@ import { Component } from '@angular/core';
         <li>
           <a mat-button routerLink='/create' routerLinkActive='mat-accent'>New Post</a>
         </li>
+        <li>
+          <a mat-button routerLink='/login' routerLinkActive='mat-accent'>Login</a>
+        </li>
+        <li>
+          <a mat-button routerLink='/signup' routerLinkActive='mat-accent'>Signup</a>
+        </li>
       </ul>
     </mat-toolbar>
   `,

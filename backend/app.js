@@ -4,6 +4,8 @@ const path = require('path');
 const mongoose = require('mongoose');
 
 const postsRoutes = require('./routers/post')
+const userRoutes = require('./routers/user');
+
 const app = express();
 
 mongoose.connect('mongodb+srv://coco99:RsNCTFSb96w9ZECv@cluster0-rbewm.mongodb.net/test?retryWrites=true&w=majority', { useNewUrlParser: true })
@@ -27,5 +29,6 @@ app.use((req, res, next) => {
 });
 
 app.use('/api/posts', postsRoutes);
+app.use('/api/user', userRoutes);
 
 module.exports = app;

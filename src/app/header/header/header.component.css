@@ -8,6 +8,10 @@ a {
   color: #fff;
 }
 
+ul {
+  display: flex;
+}
+
 .spacer {
   flex: 1 1 auto;
 }
