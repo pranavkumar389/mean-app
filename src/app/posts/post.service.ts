@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 export class PostService {
 
   private posts: Post[] = [];
-  private postsUpdated = new Subject<{posts: Post[], count: number}>();
+  private postsUpdated = new Subject<{ posts: Post[], count: number }>();
 
   constructor(
     private http: HttpClient,
@@ -27,7 +27,8 @@ export class PostService {
               title: p.title,
               content: p.content,
               id: p._id,
-              imagePath: p.imagePath
+              imagePath: p.imagePath,
+              creator: p.creator
             };
           }), count: postData.count
         };
@@ -35,7 +36,7 @@ export class PostService {
       .subscribe(
         (transformedPostData) => {
           this.posts = transformedPostData.posts;
-          this.postsUpdated.next({posts: [...this.posts], count: transformedPostData.count});
+          this.postsUpdated.next({ posts: [...this.posts], count: transformedPostData.count });
         }
       );
   }
@@ -70,7 +71,8 @@ export class PostService {
         id: postId,
         title: postTitle,
         content: postContent,
-        imagePath: image
+        imagePath: image,
+        creator: null
       };
     }
     this.http.put<{ message: string, newPostId: string }>('http://localhost:3000/api/posts/' + postId, editPost)
@@ -84,7 +86,9 @@ export class PostService {
   }
 
   getPostById(postId: string) {
-    return this.http.get<{ _id: string, title: string, content: any, imagePath: string }>('http://localhost:3000/api/posts/' + postId);
+    return this.http.get
+    <{ _id: string, title: string, content: any, imagePath: string, creator: string }>
+    ('http://localhost:3000/api/posts/' + postId);
   }
 
 }
